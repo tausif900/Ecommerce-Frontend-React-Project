@@ -11,14 +11,29 @@ function Register() {
     watch,
   } = useForm();
 
+  // Register user
   const onSubmit = async (data) => {
     console.log(data);
     try {
       const response = await api.post("/users", data);
       console.log(response);
+      alert("Registration done");
     } catch (error) {
       alert("Something went wrong");
       console.log("Error", error);
+    }
+  };
+  // Check email
+  const existEmail = async (value) => {
+    //here later we get the value of email.
+    let exist;
+    try {
+      const response = await api.get(`/users/check-email?email=${value}`);
+      console.log(response);
+      exist = response.data;
+      return exist ? "email already exist" : true;
+    } catch (error) {
+      alert("Something went wrong");
     }
   };
 
@@ -133,6 +148,7 @@ function Register() {
                             /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/,
                           message: "Please enter a valid email address",
                         },
+                        validate: { existEmail },
                       })}
                     />
                     <small className="text-danger">

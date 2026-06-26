@@ -1,6 +1,25 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import { api } from "../../api";
 
 const AddProduct = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      const response = await api.post("/products", data);
+      alert(response.data.name + " added successfully.");
+    } catch (error) {
+      console.log(error);
+      alert("Oops! something went wrong..");
+    }
+  };
+
   return (
     <main className="container py-5">
       <div className="row justify-content-center">
@@ -13,7 +32,7 @@ const AddProduct = () => {
               </p>
             </div>
 
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-3">
                 <label htmlFor="productName" className="form-label">
                   Name
@@ -23,7 +42,13 @@ const AddProduct = () => {
                   className="form-control"
                   id="productName"
                   placeholder="Enter product name"
+                  {...register("name", {
+                    required: "product name is required",
+                  })}
                 />
+                <p className="text-danger">
+                  {errors.name && errors.name.message}
+                </p>
               </div>
 
               <div className="mb-3">
@@ -35,7 +60,13 @@ const AddProduct = () => {
                   id="productDescription"
                   rows="4"
                   placeholder="Enter product description"
+                  {...register("description", {
+                    required: "please fill the description",
+                  })}
                 ></textarea>
+                <p className="text-danger">
+                  {errors.description && errors.description.message}
+                </p>
               </div>
 
               <div className="mb-4">
@@ -47,7 +78,13 @@ const AddProduct = () => {
                   className="form-control"
                   id="productPrice"
                   placeholder="Enter product price"
+                  {...register("price", {
+                    required: "fill the price",
+                  })}
                 />
+                <p className="text-danger">
+                  {errors.price && errors.price.message}
+                </p>
               </div>
 
               <button type="submit" className="btn btn-primary w-100">

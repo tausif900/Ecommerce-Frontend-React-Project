@@ -14,12 +14,24 @@ const ProductList = () => {
     }
   };
 
+  // To Delete products
+  const deleteProduct = async (id) => {
+    const response = await api.delete(`/products/${id}`);
+    // waps se fetchProduct ko call kro and product ko render kro...
+    fetchProducts();
+  };
+
+  // To update products
+
+  const updateProduct = () => {};
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
   return (
     <div>
+      <h2>Total Products: {products && products.length}</h2>
       {products ? (
         <div>
           {
@@ -30,6 +42,7 @@ const ProductList = () => {
                   <th scope="col">Name</th>
                   <th scope="col">Description</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,6 +53,15 @@ const ProductList = () => {
                       <td>{p.name}</td>
                       <td>{p.description}</td>
                       <td>{p.price}</td>
+                      <td>
+                        <button className="btn btn-success m-2">Update</button>
+                        <button
+                          className="btn btn-danger m-2"
+                          onClick={() => deleteProduct(p.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}

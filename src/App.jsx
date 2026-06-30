@@ -7,6 +7,7 @@ import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
 import AddProduct from "./components/adminPages/AddProduct";
 import ProductList from "./components/adminPages/ProductList";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer theme="dark" />
     </>
   );
 }

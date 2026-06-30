@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { api } from "../../api";
+import { toast } from "react-toastify";
 
 function Register() {
   const {
@@ -16,11 +17,9 @@ function Register() {
     console.log(data);
     try {
       const response = await api.post("/users", data);
-      console.log(response);
-      alert("Registration done");
+      toast.success("Registration done");
     } catch (error) {
-      alert("Something went wrong");
-      console.log("Error", error);
+      toast.error("Something went wrong");
     }
   };
   // Check email
@@ -29,11 +28,10 @@ function Register() {
     let exist;
     try {
       const response = await api.get(`/users/check-email?email=${value}`);
-      console.log(response);
       exist = response.data;
       return exist ? "email already exist" : true;
     } catch (error) {
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

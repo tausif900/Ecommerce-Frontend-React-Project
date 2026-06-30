@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const ProductList = () => {
   const [products, setProducts] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [productId, setProductId] = useState(null);
+  const { register, handleSubmit, reset } = useForm(); //reset helps to set the fields of the form.
 
   // To fetch products
   const fetchProducts = async () => {
@@ -10,7 +15,7 @@ const ProductList = () => {
       const response = await api.get("/products");
       setProducts(response.data);
     } catch (error) {
-      alert("Oops! Something went wrong..");
+      toast.error("Oops! Something went wrong..");
     }
   };
 
@@ -22,16 +27,106 @@ const ProductList = () => {
   };
 
   // To update products
+  const updateProduct = async (data) => {
+    console.log(data);
+    try {
+      const response = await api.put(`/products/${productId}`, data);
+      fetchProducts();
+      toast.success("Product updates successfully!");
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  };
 
-  const updateProduct = () => {};
+  // To fetch Categories
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/categories");
+      setCategories(response.data);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   return (
     <div>
       <h2>Total Products: {products && products.length}</h2>
+
+      {/* update product */}
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">
+                Update Product
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="" onSubmit={handleSubmit(updateProduct)}>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="inputGroup-sizing-default">
+                    Name
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                    {...register("name", {})}
+                  />
+                </div>
+
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="inputGroup-sizing-default">
+                    Description
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                    {...register("description")}
+                  />
+                </div>
+
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="inputGroup-sizing-default">
+                    Price
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                    {...register("price")}
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Update
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {products ? (
         <div>
           {
@@ -54,7 +149,21 @@ const ProductList = () => {
                       <td>{p.description}</td>
                       <td>{p.price}</td>
                       <td>
-                        <button className="btn btn-success m-2">Update</button>
+                        <button
+                          className="btn btn-success m-2"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                          onClick={() => {
+                            setProductId(p.id);
+                            reset({
+                              name: p.name,
+                              description: p.description,
+                              price: p.price,
+                            });
+                          }}
+                        >
+                          Update
+                        </button>
                         <button
                           className="btn btn-danger m-2"
                           onClick={() => deleteProduct(p.id)}

@@ -28,7 +28,6 @@ const ProductList = () => {
 
   // To update products
   const updateProduct = async (data) => {
-    console.log(data);
     try {
       const response = await api.put(`/products/${productId}`, data);
       fetchProducts();
@@ -42,7 +41,7 @@ const ProductList = () => {
   const fetchCategories = async () => {
     try {
       const response = await api.get("/categories");
-      setCategories(response.data);
+      setCategories(response.data._embedded.categories);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -137,6 +136,7 @@ const ProductList = () => {
                   <th scope="col">Name</th>
                   <th scope="col">Description</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Category</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -148,6 +148,19 @@ const ProductList = () => {
                       <td>{p.name}</td>
                       <td>{p.description}</td>
                       <td>{p.price}</td>
+                      <td>
+                        <div class="input-group mb-3">
+                          <select class="form-select" id="inputGroupSelect01">
+                            <option selected>Select Category...</option>
+                            {categories &&
+                              categories.map((category) => {
+                                return (
+                                  <option value="1">{category.name}</option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                      </td>
                       <td>
                         <button
                           className="btn btn-success m-2"

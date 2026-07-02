@@ -37,6 +37,17 @@ const ProductList = () => {
     }
   };
 
+  const assignCategory = async (productId, categoryId) => {
+    try {
+      const response = await api.put(
+        `/categories/${categoryId}/products/${productId}`,
+        toast.success("category updated"),
+      );
+    } catch (error) {
+      toast.error("something went wrong");
+    }
+  };
+
   // To fetch Categories
   const fetchCategories = async () => {
     try {
@@ -150,12 +161,27 @@ const ProductList = () => {
                       <td>{p.price}</td>
                       <td>
                         <div class="input-group mb-3">
-                          <select class="form-select" id="inputGroupSelect01">
+                          <select
+                            class="form-select"
+                            id="inputGroupSelect01"
+                            onChange={(e) =>
+                              assignCategory(p.id, e.target.value)
+                            }
+                          >
                             <option selected>Select Category...</option>
                             {categories &&
                               categories.map((category) => {
                                 return (
-                                  <option value="1">{category.name}</option>
+                                  <option
+                                    value={category.id}
+                                    selected={
+                                      p.category &&
+                                      p.category.id == category.id
+                                    }
+                                  >
+                                    {category.id}
+                                    {category.name}
+                                  </option>
                                 );
                               })}
                           </select>

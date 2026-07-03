@@ -87,6 +87,15 @@ const AddProduct = () => {
                 </p>
               </div>
 
+              {/* Product Image */}
+
+              <div class="mb-3">
+                <label for="formFile" class="form-label">
+                  image
+                </label>
+                <input class="form-control" type="file" id="formFile" />
+              </div>
+
               <button type="submit" className="btn btn-primary w-100">
                 Add Product
               </button>

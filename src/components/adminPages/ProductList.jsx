@@ -30,6 +30,16 @@ const ProductList = () => {
   const updateProduct = async (data) => {
     try {
       const response = await api.put(`/products/${productId}`, data);
+      if (data.productImage && data.productImage.length > 0) {
+        const formData = new FormData();
+        formData.append("productImage", data.productImage[0]);
+
+        api.post(`/products/upload-image/${productId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
       fetchProducts();
       toast.success("Product updates successfully!");
     } catch (error) {
@@ -128,6 +138,20 @@ const ProductList = () => {
                     {...register("price")}
                   />
                 </div>
+
+                {/* Product Image */}
+                <div class="mb-3">
+                  <label for="formFile" class="form-label">
+                    image
+                  </label>
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="formFile"
+                    {...register("productImage")}
+                  />
+                </div>
+
                 <button type="submit" className="btn btn-primary">
                   Update
                 </button>
@@ -175,8 +199,7 @@ const ProductList = () => {
                                   <option
                                     value={category.id}
                                     selected={
-                                      p.category &&
-                                      p.category.id == category.id
+                                      p.category && p.category.id == category.id
                                     }
                                   >
                                     {category.id}

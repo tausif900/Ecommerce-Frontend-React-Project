@@ -13,6 +13,19 @@ const AddProduct = () => {
     console.log(data);
     try {
       const response = await api.post("/products", data);
+      const formData = new FormData();
+      formData.append("productImage", data.productImage[0]);
+
+      const responseImage = await api.post(
+        `/products/upload-image/${response.data.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
       alert(response.data.name + " added successfully.");
     } catch (error) {
       console.log(error);
@@ -93,7 +106,12 @@ const AddProduct = () => {
                 <label for="formFile" class="form-label">
                   image
                 </label>
-                <input class="form-control" type="file" id="formFile" />
+                <input
+                  class="form-control"
+                  type="file"
+                  id="formFile"
+                  {...register("productImage")}
+                />
               </div>
 
               <button type="submit" className="btn btn-primary w-100">

@@ -19,9 +19,15 @@ const Products = () => {
     } catch (error) {}
   };
 
+  const fetchProductsBasedOnCategory = async (categoryId) => {
+    const response = await api.get(`/categories/${categoryId}/products`);
+    setProducts(response.data);
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
+    fetchProductsBasedOnCategory();
   }, []);
 
   return (
@@ -29,11 +35,21 @@ const Products = () => {
       {/* categories */}
       {categories ? (
         categories.map((c) => {
-          return <button className="btn btn-danger m-2">{c.name}</button>;
+          return (
+            <button
+              className="btn btn-danger m-2"
+              onClick={() => fetchProductsBasedOnCategory(c.id)}
+            >
+              {c.name}
+            </button>
+          );
         })
       ) : (
         <p>Loading...</p>
       )}
+      <button className="btn btn-danger m-2" onClick={() => fetchProducts()}>
+        All Products
+      </button>
       {/* products */}
       {products ? (
         <div className="row row-cols-1 row-cols-md-4 g-4 p-3">

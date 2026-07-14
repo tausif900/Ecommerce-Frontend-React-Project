@@ -1,11 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { LogicContext } from "../../context/LoginContext";
 
 function Navbar() {
+  const { user, logout } = useContext(LogicContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
-
         <Link className="navbar-brand" to="/">
           ShopSphere
         </Link>
@@ -20,7 +21,6 @@ function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-
           <form className="d-flex mx-auto">
             <input
               className="form-control me-2"
@@ -33,7 +33,6 @@ function Navbar() {
           </form>
 
           <ul className="navbar-nav ms-auto">
-
             <li className="nav-item">
               <Link className="nav-link" to="/">
                 Home
@@ -52,23 +51,37 @@ function Navbar() {
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/register">
-                Register
-              </Link>
-            </li>
-
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <button className="nav-link" onClick={() => logout()}>
+                    Logout
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link">{user.firstName}</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                {" "}
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

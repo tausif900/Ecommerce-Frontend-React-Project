@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { api } from "../../api";
+import { LogicContext } from "../../context/LoginContext";
 
 function Login() {
   const { register, handleSubmit } = useForm();
+  const { login } = useContext(LogicContext);
 
   const onSubmit = async (data) => {
-    console.log("fetched data from form", data);
+    console.log(data);
     try {
       const response = await api.post("/auth/login", data);
       console.log(response);
+      login(response.data.token, response.data.userDto);
     } catch (error) {
       console.log(error);
     }

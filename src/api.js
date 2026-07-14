@@ -7,11 +7,11 @@ export const api = axios.create({
 
 // interceptors is used to intercept the request and add the token to the header
 // token is stored in local storage
-api.interceptors.request.use(
-  (config) => {
-    let token = localStorage.getItem("token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+// api.interceptors.request.use(
+//   (config) => {
+//     let token = localStorage.getItem("token");
+//     if (token) config.headers.Authorization = `Bearer ${token}`;
+//     return config;
+//   },
+//   (error) => Promise.reject(error),
+// );

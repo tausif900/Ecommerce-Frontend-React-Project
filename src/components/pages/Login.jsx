@@ -1,18 +1,24 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api";
 import { LogicContext } from "../../context/LoginContext";
 
 function Login() {
   const { register, handleSubmit } = useForm();
   const { login } = useContext(LogicContext);
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const response = await api.post("/auth/login", data);
       console.log(response);
+      const role = response.data.userDto.role;
+      if (role == "ROLE_ADMIN") {
+        navigate("/admin/products");
+      } else if (role == "ROLE_CUSTOMER") {
+        navigate("/products");
+      }
       login(response.data.token, response.data.userDto);
     } catch (error) {
       console.log(error);

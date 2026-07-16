@@ -24,6 +24,14 @@ const Products = () => {
     setProducts(response.data);
   };
 
+  const addToCart = async (productId) => {
+    try {
+      await api.post(`/cart/${productId}`, { qunatity: 1 });
+    } catch (error) {
+      alert("somethig went wrong");
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -97,6 +105,7 @@ const Products = () => {
 
                   <button
                     className="btn btn-primary mt-auto"
+                    onClick={() => addToCart(p.id)}
                     style={{
                       borderRadius: "25px",
                       fontWeight: "600",

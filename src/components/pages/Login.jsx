@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api";
-import { LogicContext } from "../../context/LoginContext";
+import { LoginContext } from "../../context/LoginContext";
 
 function Login() {
   const { register, handleSubmit } = useForm();
-  const { login } = useContext(LogicContext);
+  const { login } = useContext(LoginContext);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {

@@ -33,10 +33,10 @@ export const LoginProvider = ({ children }) => {
   };
 
   return (
-    <LogicContext.Provider
+    <LoginContext.Provider
       value={{ login, logout, user, token, isAuthenticated }}
     >
       {children}
-    </LogicContext.Provider>
+    </LoginContext.Provider>
   );
 };

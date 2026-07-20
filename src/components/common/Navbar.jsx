@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { LogicContext } from "../../context/LoginContext";
+import { LoginContext } from "../../context/LoginContext";
 
 function Navbar() {
-  const { user, logout } = useContext(LogicContext);
+  const { user, logout } = useContext(LoginContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
